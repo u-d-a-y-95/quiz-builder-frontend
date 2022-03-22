@@ -1,5 +1,11 @@
 import { useState } from "react";
+import ReactDOM from "react-dom";
+import Modal from "./components/modal";
 function App() {
+  const [imageModal,setImageModal] = useState({
+    isOpen:false,
+    item:null
+  })
   const [data, setData] = useState({
     title: "Basic Maths",
     questions: [
@@ -65,7 +71,15 @@ function App() {
                       }}
                     />
                   </div>
-                  <button className="bg-gray-200 w-8 h-8 rounded-full mx-1">
+                  <button
+                    className="bg-gray-200 w-8 h-8 rounded-full mx-1"
+                    onClick={(e) => {
+                      setImageModal({
+                        isOpen:true,
+                        item:question
+                      })
+                    }}
+                  >
                     <i className="fa fa-image"></i>
                   </button>
                   <select
@@ -271,6 +285,47 @@ function App() {
           ))}
         </div>
       </div>
+      <Modal open={imageModal.isOpen}>
+        <div className="bg-white p-10 w-1/3">
+          <div className="flex justify-between items-center border-b">
+            <h3 className="h3 text-sky-500 font-bold">Links</h3>
+            <button
+              className="hover:bg-gray-200 w-8 h-8 rounded-full"
+              onClick={(e) => {
+                setImageModal({
+                  isOpen:false,
+                  item:null
+                })
+              }}
+            >
+              <i className="fa fa-times"></i>
+            </button>
+          </div>
+          <div className="my-8">
+            <div className="flex">
+              <div className="w-10/12">
+                <input
+                  className="w-full border-b-2 outline-0 focus:border-blue-500 py-1"
+                  value={""}
+                  onChange={(e) => {}}
+                />
+              </div>
+              <button
+                className="bg-sky-500 px-8 mx-4 rounded text-white"
+                onClick={(e) => {
+                  // imageModal.item.imgUrl.push()
+                  setImageModal({
+                    isOpen:false,
+                    item:null
+                  })
+                }}
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
