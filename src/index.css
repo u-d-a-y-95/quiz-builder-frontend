@@ -1,21 +1,4 @@
-#root {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-
-.pointer:active,
-.pointer:focus,
-.pointer:hover {
-  cursor: pointer;
+.w-500{
+    max-width: 700px;
 }
-.question-card{
-  width: 500px;
-  border: 1px solid grey;
-  padding: 20px;
-}
-.rounded {
-  border-radius: 50%;
-}
-
