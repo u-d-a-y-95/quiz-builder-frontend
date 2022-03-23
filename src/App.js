@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Modal from "./components/modal";
+import Radio from "./components/radio";
 function App() {
   // "https://cdn.pixabay.com/photo/2021/09/02/16/48/cat-6593947_960_720.jpg"
   const [imageModal, setImageModal] = useState({
@@ -13,6 +14,7 @@ function App() {
       {
         order: 0,
         probType: 1,
+        name :new Date().toString(),
         prob: {
           text: "",
           imgUrl: [],
@@ -47,6 +49,7 @@ function App() {
                           ...data,
                         });
                       }}
+                      placeholder="Enter Question"
                     />
                   </div>
                   <button
@@ -76,7 +79,6 @@ function App() {
                     value={question.probType}
                     onChange={(e) => {
                       question.probType = Number(e.target.value);
-                      question.name = new Date().toString();
                       setData({
                         ...data,
                       });
@@ -111,7 +113,7 @@ function App() {
                   )}
                 </div>
               </div>
-              <div className="my-16">
+              <div className="my-8">
                 {question?.options?.map((option, optionIndex) => (
                   <div>
                     <div className="my-4">
@@ -154,6 +156,7 @@ function App() {
                               ...data,
                             });
                           }}
+                          placeholder="Enter option"
                         />
                       </div>
                       <div className="w-3/12 text-right">
@@ -194,15 +197,8 @@ function App() {
                   </span>
                 </div>
               </div>
-              <div className="py-4">
-                <div className="flex justify-between">
-                  <input className="w-48 border-b-2 outline-0 focus:border-blue-500 py-1" />
-                  <div>
-                    <button className="bg-gray-200 w-8 h-8 rounded-full ">
-                      <i className="fa fa-trash"></i>
-                    </button>
-                  </div>
-                </div>
+              <div>
+                <input className="w-48 border-b-2 outline-0 focus:border-blue-500 py-1" placeholder="Enter point" />
               </div>
               <div
                 className="absolute top-0 bg-gray-100 w-12 h-20 flex flex-col"
@@ -216,6 +212,7 @@ function App() {
                     data?.questions?.splice(questionIndex + 1, 0, {
                       order: questionIndex + 1,
                       probType: 1,
+                      name :new Date().toString(),
                       prob: {
                         text: "",
                         imgUrl: [],
@@ -290,20 +287,21 @@ function App() {
                     </div>
                     {console.log(question)}
                     {question?.probType === 1 && (
-                      <div className="flex items-center">
-                        <input
-                          type="radio"
-                          name={question.name}
-                          className="h-8 w-6"
-                          id={question.name + optionIndex}
-                        />
-                        <label
-                          className="ml-2 font-bold"
-                          htmlFor={question.name + optionIndex}
-                        >
-                          {option?.text}
-                        </label>
-                      </div>
+                      <Radio name={question?.name} id={question.name + optionIndex} option={option?.text} checked="" />
+                      // <div className="flex items-center">
+                      //   <input
+                      //     type="radio"
+                      //     name={question.name}
+                      //     className="h-8 w-6"
+                      //     id={question.name + optionIndex}
+                      //   />
+                      //   <label
+                      //     className="ml-2 font-bold"
+                      //     htmlFor={question.name + optionIndex}
+                      //   >
+                      //     {option?.text}
+                      //   </label>
+                      // </div>
                     )}
                   </div>
                 ))}
