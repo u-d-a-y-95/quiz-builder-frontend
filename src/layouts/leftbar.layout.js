@@ -1,3 +1,5 @@
+import { NavLink } from "react-router-dom";
+
 const LeftBar = () => {
   const manus = [
     {
@@ -22,10 +24,22 @@ const LeftBar = () => {
   return (
     <div style={{ minWidth: "250px" }} className="shadow-lg">
       {manus?.map((menu) => (
-        <div key={menu?.id} className="shadow-md pl-8 py-4 hover:bg-gray-200 hover:cursor-pointer hover:text-sky-500 hover:font-bold hover:border-l-4 hover:border-l-sky-500">
+        <NavLink
+          key={menu?.id}
+          to={menu?.url}
+          className={({ isActive }) =>
+            `block shadow-md pl-8 py-4 
+            ${
+              !isActive &&
+              "hover:bg-gray-100 hover:cursor-pointer hover:text-sky-400 hover:font-bold hover:border-l-8 hover:border-l-sky-400"
+            }  ${
+              isActive && "font-bold border-l-8 border-l-sky-900 text-white bg-sky-500"
+            }`
+          }
+        >
           <i className={menu?.icon}></i>
           <span className="ml-4">{menu?.label}</span>
-        </div>
+        </NavLink>
       ))}
     </div>
   );
