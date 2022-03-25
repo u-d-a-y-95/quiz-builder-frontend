@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Modal from "./components/modal";
-import Radio from "./components/radio";
+import Option from "./components/option";
 function App() {
   // "https://cdn.pixabay.com/photo/2021/09/02/16/48/cat-6593947_960_720.jpg"
   const [imageModal, setImageModal] = useState({
@@ -14,7 +14,7 @@ function App() {
       {
         order: 0,
         probType: 1,
-        name :new Date().toString(),
+        name: new Date().toString(),
         prob: {
           text: "",
           imgUrl: [],
@@ -24,9 +24,12 @@ function App() {
             text: "",
             imgUrl: [],
             isAnswer: false,
+            uniqueValue: new Date().getTime(),
           },
         ],
         points: 5,
+        answers: new Set(),
+        predicts: new Set(),
       },
     ],
   });
@@ -79,6 +82,8 @@ function App() {
                     value={question.probType}
                     onChange={(e) => {
                       question.probType = Number(e.target.value);
+                      question.answers.clear();
+                      question.predicts.clear();
                       setData({
                         ...data,
                       });
@@ -139,9 +144,28 @@ function App() {
                         <input
                           type="checkbox"
                           className="w-6 h-6"
-                          checked={option.isAnswer}
+                          checked={question.answers.has(option.uniqueValue)}
                           onChange={(e) => {
+                            if (question.probType === 1) {
+                              if (e.target.checked) {
+                                question.answers.clear();
+                                question.answers.add(option.uniqueValue);
+                              }
+                            } else {
+                              if (
+                                e.target.checked &&
+                                !question.answers.has(option.uniqueValue)
+                              ) {
+                                question.answers.add(option.uniqueValue);
+                              } else if (
+                                !e.target.checked &&
+                                question.answers.has(option.uniqueValue)
+                              ) {
+                                question.answers.delete(option.uniqueValue);
+                              }
+                            }
                             option.isAnswer = e.target.checked;
+
                             setData({
                               ...data,
                             });
@@ -166,6 +190,10 @@ function App() {
                         <button
                           className="bg-gray-200 w-8 h-8 rounded-full ml-2"
                           onClick={(e) => {
+                            question.answers.has(option.uniqueValue) &&
+                              question.answers.delete(option.uniqueValue);
+                            question.predicts.has(option.uniqueValue) &&
+                              question.predicts.delete(option.uniqueValue);
                             question?.options?.splice(optionIndex, 1);
                             setData({
                               ...data,
@@ -187,6 +215,7 @@ function App() {
                         text: "",
                         imgUrl: [],
                         isAnswer: false,
+                        uniqueValue: new Date().getTime(),
                       });
                       setData({
                         ...data,
@@ -198,7 +227,10 @@ function App() {
                 </div>
               </div>
               <div>
-                <input className="w-48 border-b-2 outline-0 focus:border-blue-500 py-1" placeholder="Enter point" />
+                <input
+                  className="w-48 border-b-2 outline-0 focus:border-blue-500 py-1"
+                  placeholder="Enter point"
+                />
               </div>
               <div
                 className="absolute top-0 bg-gray-100 w-12 h-20 flex flex-col"
@@ -212,7 +244,7 @@ function App() {
                     data?.questions?.splice(questionIndex + 1, 0, {
                       order: questionIndex + 1,
                       probType: 1,
-                      name :new Date().toString(),
+                      name: new Date().toString(),
                       prob: {
                         text: "",
                         imgUrl: [],
@@ -286,23 +318,36 @@ function App() {
                       ))}
                     </div>
                     {console.log(question)}
-                    {question?.probType === 1 && (
-                      <Radio name={question?.name} id={question.name + optionIndex} option={option?.text} checked="" />
-                      // <div className="flex items-center">
-                      //   <input
-                      //     type="radio"
-                      //     name={question.name}
-                      //     className="h-8 w-6"
-                      //     id={question.name + optionIndex}
-                      //   />
-                      //   <label
-                      //     className="ml-2 font-bold"
-                      //     htmlFor={question.name + optionIndex}
-                      //   >
-                      //     {option?.text}
-                      //   </label>
-                      // </div>
-                    )}
+                    <Option
+                      name={question?.name}
+                      id={question.name + optionIndex}
+                      option={option?.text}
+                      checked={question?.predicts?.has(option.uniqueValue)}
+                      type={question?.probType === 1 ? "radio" : "checkbox"}
+                      onChange={(e) => {
+                        if (question.probType === 1) {
+                          if (e.target.checked) {
+                            question.predicts.clear();
+                            question.predicts.add(option.uniqueValue);
+                          }
+                        } else {
+                          if (
+                            e.target.checked &&
+                            !question.predicts.has(option.uniqueValue)
+                          ) {
+                            question.predicts.add(option.uniqueValue);
+                          } else if (
+                            !e.target.checked &&
+                            question.predicts.has(option.uniqueValue)
+                          ) {
+                            question.predicts.delete(option.uniqueValue);
+                          }
+                        }
+                        setData({
+                          ...data,
+                        });
+                      }}
+                    />
                   </div>
                 ))}
               </div>

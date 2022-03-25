@@ -1,15 +1,15 @@
-const Radio = ({ name, id, className, option,checked}) => {
+const Option = ({ name, id, className, option,checked,type,onChange}) => {
   return (
     <>
       <div className="flex items-center">
         <input
-          type="radio"
+          type={type}
           name={name}
           className="h-8 w-6"
           id={id}
           value={option}
           checked={checked}
-          onChange={e=>{}}
+          onChange={onChange}
         />
         <label className="ml-2 font-bold" htmlFor={id}>
           {option}
@@ -19,4 +19,4 @@ const Radio = ({ name, id, className, option,checked}) => {
   );
 };
 
-export default Radio;
+export default Option;
