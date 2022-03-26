@@ -1,4 +1,29 @@
+.w-500 {
+  width: 700px;
+}
 
-.w-500{
-    width: 700px;
+
+.tooltip .tip {
+    width: max-content;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tip {
+  visibility: visible;
+  opacity: 1;
 }

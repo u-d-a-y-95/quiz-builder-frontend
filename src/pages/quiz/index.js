@@ -1,3 +1,5 @@
+import ToolTip from "../../components/tooltip";
+
 const QuizPage = () => {
   const headers = [
     "#",
@@ -58,17 +60,20 @@ const QuizPage = () => {
                   {item?.totalPoint}
                 </td>
                 <td className="border text-sm py text-center">
-                  <span className="rounded p-1  mx-1 hover:bg-gray-100 hover:text-sky-600 hover:cursor-pointer">
-                    <i className="fa fa-eye"></i>
-                    
-                  </span>
-                  <span className="rounded p-1  mx-1 hover:bg-gray-100 hover:text-yellow-600 hover:cursor-pointer">
-                    <i className="fa fa-link"></i>
-                  </span>
+                  <ToolTip tip="view">
+                    <span className="rounded p-1  mx-1 hover:bg-gray-100 hover:text-sky-600 hover:cursor-pointer">
+                      <i className="fa fa-eye"></i>
+                    </span>
+                  </ToolTip>
+                  <ToolTip tip="link">
+                    <span className="rounded p-1  mx-1 hover:bg-gray-100 hover:text-yellow-600 hover:cursor-pointer">
+                      <i className="fa fa-link"></i>
+                    </span>
+                  </ToolTip>
+
                   <span className="rounded p-1  mx-1 hover:bg-gray-100 hover:text-red-600 hover:cursor-pointer">
                     <i className="fa fa-trash"></i>
                   </span>
-                 
                 </td>
               </tr>
             ))}
