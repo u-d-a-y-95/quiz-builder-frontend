@@ -1,22 +1,22 @@
-const Option = ({ name, id, className, option,checked,type,onChange}) => {
+const Choicebox = ({ name, id,value,label,checked,type,onChange,className}) => {
   return (
     <>
       <div className="flex items-center">
         <input
           type={type}
           name={name}
-          className="h-8 w-6"
+          className={`h-8 w-6 ${className}`}
           id={id}
-          value={option}
+          value={value}
           checked={checked}
           onChange={onChange}
         />
         <label className="ml-2 font-bold" htmlFor={id}>
-          {option}
+          {label}
         </label>
       </div>
     </>
   );
 };
 
-export default Option;
+export default Choicebox;
