@@ -145,6 +145,10 @@ const Question = ({
             validatyCheckAndSetData();
           }}
         />
+        <br/>
+        <ErrorMessage
+          error={data?.error?.status?.questions[questionIndex]?.point}
+        />
       </div>
       <div
         className="absolute top-0 bg-gray-100 w-12 h-20 flex flex-col"

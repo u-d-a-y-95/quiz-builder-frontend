@@ -38,12 +38,23 @@ export const validation = (quiz) =>{
 
         // check number of options
         if(question?.options?.length<2){
+            validity.valid=0
             obj["numberOfOption"]="At least two option needed"
         }
 
-        //
+        // check answers
         if(question?.answers?.length<1){
+            validity.valid=0
             obj["numberOfChecked"]="At least One option checked"
+        }
+
+        // check point 
+
+        if(question?.point<1){
+            validity.valid=0
+            obj["point"]="Point can't be 0 nor Negative"
+        }else{
+            obj["point"] =""
         }
 
         validity.status["questions"].push(obj)

@@ -34,15 +34,8 @@ const QuizForm = () => {
           text: "",
           imgUrl: [],
         },
-        options: [
-          {
-            text: "",
-            imgUrl: [],
-            isAnswer: false,
-            uniqueValue: new Date().getTime(),
-          },
-        ],
-        point: 5,
+        options: [],
+        point: 1,
         answers: [],
         predicts: [],
       },
@@ -74,7 +67,7 @@ const QuizForm = () => {
             type="button"
             className="bg-gray-300 px-6 py-1 text-white rounded mx-1"
             onClick={(e) => {
-              navigate("/quiz")
+              navigate("/quiz");
             }}
           >
             back
