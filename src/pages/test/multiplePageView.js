@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import Choicebox from "../../components/choicebox";
 
 const MultiplePageView = ({ quiz, setQuiz, submitBtn,pageNo,setPageNo }) => {

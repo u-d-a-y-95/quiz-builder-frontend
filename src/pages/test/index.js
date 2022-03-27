@@ -8,7 +8,7 @@ import MultiplePageView from "./multiplePageView";
 import ScoreView from "./score";
 import SinglePageView from "./singlePageView";
 
-const TestPage = ({}) => {
+const TestPage = () => {
   const [pageNo, setPageNo] = useState(0);
   const params = useParams();
   const [quiz, setQuiz] = useState({});
@@ -17,9 +17,11 @@ const TestPage = ({}) => {
     score: "",
   });
   useEffect(() => {
-    const local = getLocalData(QUIZ);
-    local.hasOwnProperty(params?.id) && setQuiz(local[params?.id]);
-  }, []);
+    if (params?.id) {
+      const local = getLocalData(QUIZ);
+      local.hasOwnProperty(params?.id) && setQuiz(local[params?.id]);
+    }
+  }, [params]);
   const submitBtn = () => {
     const obj = quiz?.questions?.reduce(
       (acc, item) => {
@@ -67,7 +69,7 @@ const TestPage = ({}) => {
       isOpen: false,
       score: "",
     });
-    setPageNo(0)
+    setPageNo(0);
   };
 
   return (
