@@ -10,7 +10,6 @@ const MultiplePageView = ({ quiz, setQuiz, submitBtn,pageNo,setPageNo }) => {
         <div className="shadow-lg p-12 mb-4 border-2">
           <h1 className="text-2xl font-bold py-2">{quiz?.title}</h1>
           <p>Questions : {quiz?.questions?.length}</p>
-          <p>Total : </p>
         </div>
         {quiz?.questions?.map((question, questionIndex) => (
           <>
