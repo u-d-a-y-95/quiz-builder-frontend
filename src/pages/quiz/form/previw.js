@@ -2,7 +2,7 @@ import Choicebox from "../../../components/choicebox";
 
 const Preview = ({ data, setData }) => {
   return (
-    <div className="w-500">
+    <div className="w-600">
       <div className="shadow-lg p-12 mb-4 border-2">
         <h1 className="text-sm font-bold">{data?.title}</h1>
       </div>

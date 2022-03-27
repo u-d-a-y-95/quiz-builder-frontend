@@ -1,23 +1,29 @@
-import { useState } from "react";
-import { useDrag, useDrop } from "react-dnd";
+import { useEffect, useState } from "react";
 import Modal from "../../../components/modal";
 import Choicebox from "../../../components/choicebox";
 import { QUIZ } from "../../../utils/constant";
 import { getLocalData, setLocalData } from "../../../utils/localStorage";
-import Option from "./option";
-import Preview from "./previw";
 import Question from "./question";
+import { validation } from "./validation";
+import ErrorMessage from "../../../components/error";
+import { useNavigate, useParams } from "react-router-dom";
 
 const QuizForm = () => {
   // "https://cdn.pixabay.com/photo/2021/09/02/16/48/cat-6593947_960_720.jpg"
+  const params = useParams();
 
+  const navigate = useNavigate();
   const [imageModal, setImageModal] = useState({
     isOpen: false,
     item: null,
   });
+  const [successModal, setSuccessModal] = useState({
+    isOpen: false,
+    id: "",
+  });
   const [link, setLink] = useState("");
   const [data, setData] = useState({
-    title: "Basic Maths",
+    title: "",
     display: 1,
     questions: [
       {
@@ -42,25 +48,61 @@ const QuizForm = () => {
       },
     ],
   });
+
+  useEffect(() => {
+    if (params?.id) {
+      const local = getLocalData(QUIZ);
+      local.hasOwnProperty(params?.id) && setData(local[params?.id]);
+    }
+  }, [params]);
+
+  const validatyCheckAndSetData = () => {
+    data["error"] = validation(data);
+    data["isSubmitBtnPressed"] = false;
+    setData({
+      ...data,
+    });
+  };
   return (
     <div className="flex flex-col">
-      {console.log(data)}
       <div className="flex justify-between items-center">
         <h1 className="font-bold text-sky-500 text-2xl tracking-widest">
           create Quiz
         </h1>
-        <button
-          type="button"
-          className="bg-sky-500 px-6 py-2 text-white rounded"
-          onClick={(e) => {
-            const local = getLocalData(QUIZ);
-            data.id = new Date().getTime();
-            local[data.id] = data;
-            setLocalData(QUIZ, local);
-          }}
-        >
-          save
-        </button>
+        <div>
+          <button
+            type="button"
+            className="bg-gray-300 px-6 py-1 text-white rounded mx-1"
+            onClick={(e) => {
+              navigate("/quiz")
+            }}
+          >
+            back
+          </button>
+          <button
+            type="button"
+            className="bg-sky-500 px-6 py-1 text-white rounded mx-1"
+            onClick={(e) => {
+              data["error"] = validation(data);
+              data["isSubmitBtnPressed"] = true;
+              setData({
+                ...data,
+              });
+              if (data?.error?.valid) {
+                const local = getLocalData(QUIZ);
+                data.id = params?.id || new Date().getTime();
+                local[data.id] = data;
+                setLocalData(QUIZ, local);
+                setSuccessModal({
+                  isOpen: true,
+                  id: data.id,
+                });
+              }
+            }}
+          >
+            save
+          </button>
+        </div>
       </div>
       <div
         style={{
@@ -68,21 +110,20 @@ const QuizForm = () => {
           overflow: "auto",
         }}
       >
-        <div className="flex  justify-between">
+        <div className="flex justify-between mt-4">
           <div className="flex">
-            <div className="w-500">
+            <div className="w-600">
               <div className="shadow-lg p-12 mb-4 border-2">
                 <input
                   className="border-b-2 outline-0 focus:border-blue-500 mx-2 w-full py-1"
                   value={data?.title}
                   onChange={(e) => {
                     data.title = e.target.value;
-                    setData({
-                      ...data,
-                    });
+                    validatyCheckAndSetData();
                   }}
                   placeholder="Enter Title"
                 />
+                <ErrorMessage error={data?.error?.status.title} />
                 <div className="flex mt-4 gap-4">
                   <Choicebox
                     id="display1"
@@ -93,9 +134,7 @@ const QuizForm = () => {
                     label="Single Page"
                     onChange={(e) => {
                       data.display = Number(e?.target?.value);
-                      setData({
-                        ...data,
-                      });
+                      validatyCheckAndSetData();
                     }}
                   />
                   <Choicebox
@@ -107,9 +146,7 @@ const QuizForm = () => {
                     label="Multiple Page"
                     onChange={(e) => {
                       data.display = Number(e?.target?.value);
-                      setData({
-                        ...data,
-                      });
+                      validatyCheckAndSetData();
                     }}
                   />
                 </div>
@@ -125,6 +162,8 @@ const QuizForm = () => {
                     data={data}
                     setImageModal={setImageModal}
                     questionIndex={questionIndex}
+                    setLink={setLink}
+                    validatyCheckAndSetData={validatyCheckAndSetData}
                   />
                 </div>
               ))}
@@ -132,9 +171,9 @@ const QuizForm = () => {
           </div>
           {/* <Preview data={data} setData={setData} /> */}
           <Modal open={imageModal.isOpen}>
-            <div className="bg-white p-10 w-1/3">
-              <div className="flex justify-between items-center border-b">
-                <h3 className="h3 text-sky-500 font-bold">Links</h3>
+            <div className="bg-white p-8 w-96  rounded">
+              <div className="flex justify-between items-center border-b bg-sky-100 py-2">
+                <h3 className="h3 text-sky-500 font-bold px-2">Links</h3>
                 <button
                   className="hover:bg-gray-200 w-8 h-8 rounded-full"
                   onClick={(e) => {
@@ -142,13 +181,16 @@ const QuizForm = () => {
                       isOpen: false,
                       item: null,
                     });
+                    setLink("");
                   }}
                 >
                   <i className="fa fa-times"></i>
                 </button>
               </div>
               <div className="my-8">
-                <div className="flex">
+                {link && <img src={link} alt="url" className="rounded" />}
+
+                <div className="flex mt-4">
                   <div className="w-10/12">
                     <input
                       className="w-full border-b-2 outline-0 focus:border-blue-500 py-1"
@@ -159,12 +201,50 @@ const QuizForm = () => {
                     />
                   </div>
                   <button
-                    className="bg-sky-500 px-8 mx-4 rounded text-white"
+                    className="bg-sky-500 px-4 ml-4 rounded text-white"
                     onClick={(e) => imageModal.saveBtn(link)}
                   >
-                    Add
+                    <i className="fa fa-plus"></i>
                   </button>
                 </div>
+              </div>
+            </div>
+          </Modal>
+          <Modal open={successModal?.isOpen}>
+            <div className="bg-white w-96 h-60 rounded p-4 flex flex-col">
+              <div className="border-b border-b-green-500 py-2 px-4 bg-green-100">
+                <h1 className="text-green-600 font-bold text-xl">Success</h1>
+              </div>
+              <div className="my-8 grow text-center">
+                <p className="font-bold">Successfull Saved</p>
+              </div>
+              <div className="border-t py-2 text-right">
+                <button
+                  type="button"
+                  className="bg-sky-500 px-4 py-1 mx-1 rounded text-white capitalize"
+                  onClick={(e) => {
+                    navigate(`/quiz/edit/${successModal?.id}`);
+                    setSuccessModal({
+                      isOpen: false,
+                      id: null,
+                    });
+                  }}
+                >
+                  edit again
+                </button>
+                <button
+                  type="button"
+                  className="bg-teal-500 px-4 py-1 mx-1 rounded text-white capitalize"
+                  onClick={(e) => {
+                    navigate("/quiz");
+                    setSuccessModal({
+                      isOpen: false,
+                      id: null,
+                    });
+                  }}
+                >
+                  goto quiz page
+                </button>
               </div>
             </div>
           </Modal>

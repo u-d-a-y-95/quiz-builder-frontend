@@ -10,7 +10,7 @@ const QuizPage = () => {
   const [landing, setLanding] = useState([]);
   const [modal, setModal] = useState({
     isOpen: false,
-    item:null
+    item: null,
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const QuizPage = () => {
     const local = getLocalData(QUIZ);
     delete local[id];
     const data = Object.values(local);
-    setLocalData(QUIZ,local)
+    setLocalData(QUIZ, local);
     setData(data);
   };
   return (
@@ -55,7 +55,7 @@ const QuizPage = () => {
         </h1>
         <button
           type="button"
-          className="bg-sky-500 px-6 py-2 text-white rounded"
+          className="bg-sky-500 px-6 py-1 text-white rounded"
           onClick={(e) => {
             navigate("./add");
           }}
@@ -97,11 +97,21 @@ const QuizPage = () => {
                       <i className="fa fa-eye"></i>
                     </span>
                   </ToolTip>
+                  <ToolTip tip="edit">
+                    <span
+                      className="rounded p-1  mx-1 hover:bg-gray-100 hover:text-sky-600 hover:cursor-pointer"
+                      onClick={(e) => {
+                        navigate(`/quiz/edit/${item?.id}`);
+                      }}
+                    >
+                      <i className="fa fa-pencil-square"></i>
+                    </span>
+                  </ToolTip>
                   <ToolTip tip="link">
                     <span
                       className="rounded p-1  mx-1 hover:bg-gray-100 hover:text-yellow-600 hover:cursor-pointer"
                       onClick={(e) => {
-                        navigate(`/test/${item?.id}`);
+                        navigate(`/view/${item?.id}`);
                       }}
                     >
                       <i className="fa fa-link"></i>
@@ -140,12 +150,12 @@ const QuizPage = () => {
             <button
               type="button"
               className="bg-red-500 px-4 py-1 mx-1 rounded text-white"
-              onClick={e=>{
-                deleteQuiz(modal?.item?.id)
+              onClick={(e) => {
+                deleteQuiz(modal?.item?.id);
                 setModal({
-                  isOpen:false,
-                  item:null
-                })
+                  isOpen: false,
+                  item: null,
+                });
               }}
             >
               Yes
@@ -153,11 +163,11 @@ const QuizPage = () => {
             <button
               type="button"
               className="bg-sky-500 px-4 py-1 mx-1 rounded text-white"
-              onClick={e=>{
+              onClick={(e) => {
                 setModal({
-                  isOpen:false,
-                  item:null
-                })
+                  isOpen: false,
+                  item: null,
+                });
               }}
             >
               No

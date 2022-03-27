@@ -1,11 +1,12 @@
 import Option from "./option";
-
+import ErrorMessage from "../../../components/error";
 const Question = ({
   question,
-  setData,
   data,
   setImageModal,
   questionIndex,
+  setLink,
+  validatyCheckAndSetData,
 }) => {
   return (
     <>
@@ -17,24 +18,22 @@ const Question = ({
               value={question.prob.text}
               onChange={(e) => {
                 question.prob.text = e.target.value;
-                setData({
-                  ...data,
-                });
+                validatyCheckAndSetData();
               }}
               placeholder="Enter Question"
             />
           </div>
           <button
+            type="button"
             className="bg-gray-200 w-8 h-8 rounded-full mx-1"
             onClick={(e) => {
               setImageModal({
                 isOpen: true,
                 item: question,
                 saveBtn: (link) => {
-                  question?.prob?.imgUrl?.push(link);
-                  setData({
-                    ...data,
-                  });
+                  link && question?.prob?.imgUrl?.push(link);
+                  validatyCheckAndSetData();
+                  setLink("");
                   setImageModal({
                     isOpen: false,
                     item: null,
@@ -53,35 +52,37 @@ const Question = ({
               question.probType = Number(e.target.value);
               question.answers = [];
               question.predicts = [];
-              setData({
-                ...data,
-              });
+              validatyCheckAndSetData();
             }}
           >
             <option value={1}>Single</option>
             <option value={2}>Multiple</option>
           </select>
         </div>
+        <ErrorMessage
+          error={data?.error?.status?.questions[questionIndex]?.prob?.text}
+        />
+
         <div className="my-4">
           {question?.prob?.imgUrl?.map((probImgUrl, probImgUrlIndex) => (
-            <span className="relative">
-              <img src={probImgUrl} alt="test" />
-              <button
-                style={{
-                  left: "-14px",
-                  top: "-14px",
-                }}
-                className="bg-gray-200 w-8 h-8 rounded-full absolute left-4 top-0"
-                onClick={(e) => {
-                  question?.prob?.imgUrl?.splice(probImgUrlIndex, 1);
-                  setData({
-                    ...data,
-                  });
-                }}
-              >
-                <i className="fa fa-times"></i>
-              </button>
-            </span>
+            <div className="my-4" key={probImgUrlIndex}>
+              <span className="relative">
+                <img src={probImgUrl} alt="test" className="rounded" />
+                <button
+                  style={{
+                    left: "-14px",
+                    top: "-14px",
+                  }}
+                  className="bg-gray-200 w-8 h-8 rounded-full absolute left-4 top-0"
+                  onClick={(e) => {
+                    question?.prob?.imgUrl?.splice(probImgUrlIndex, 1);
+                    validatyCheckAndSetData();
+                  }}
+                >
+                  <i className="fa fa-times"></i>
+                </button>
+              </span>
+            </div>
           ))}
         </div>
       </div>
@@ -92,8 +93,11 @@ const Question = ({
             option={option}
             question={question}
             optionIndex={optionIndex}
-            setData={setData}
+            validatyCheckAndSetData={validatyCheckAndSetData}
             data={data}
+            setImageModal={setImageModal}
+            setLink={setLink}
+            questionIndex={questionIndex}
           />
         ))}
 
@@ -107,14 +111,28 @@ const Question = ({
                 isAnswer: false,
                 uniqueValue: new Date().getTime(),
               });
-              setData({
-                ...data,
-              });
+              validatyCheckAndSetData();
             }}
           >
             Add onther Options
           </span>
         </div>
+        {data?.isSubmitBtnPressed &&
+          (data?.error?.status?.questions[questionIndex]?.numberOfOption ||
+            data?.error?.status?.questions[questionIndex]?.numberOfChecked) && (
+            <div className="mt-4 border py-2 bg-red-100 flex flex-col border-red-500 px-2">
+              <ErrorMessage
+                error={
+                  data?.error?.status?.questions[questionIndex]?.numberOfOption
+                }
+              />
+              <ErrorMessage
+                error={
+                  data?.error?.status?.questions[questionIndex]?.numberOfChecked
+                }
+              />
+            </div>
+          )}
       </div>
       <div>
         <input
@@ -122,11 +140,9 @@ const Question = ({
           placeholder="Enter point"
           type="number"
           value={question?.point}
-          onChange={e=>{
-              question.point = Number(e?.target?.value)
-              setData({
-                  ...data
-              })
+          onChange={(e) => {
+            question.point = Number(e?.target?.value);
+            validatyCheckAndSetData();
           }}
         />
       </div>
@@ -143,6 +159,7 @@ const Question = ({
               order: questionIndex + 1,
               probType: 1,
               name: new Date().getTime(),
+              isValid: 0,
               prob: {
                 text: "",
                 imgUrl: [],
@@ -152,9 +169,7 @@ const Question = ({
               answers: [],
               predicts: [],
             });
-            setData({
-              ...data,
-            });
+            validatyCheckAndSetData();
           }}
         >
           <i className="fa fa-plus"></i>
@@ -164,9 +179,8 @@ const Question = ({
             className="mt-2"
             onClick={(e) => {
               data?.questions?.splice(questionIndex, 1);
-              setData({
-                ...data,
-              });
+              data["isSubmitBtnPressed"] = false;
+              validatyCheckAndSetData();
             }}
           >
             <i className="fa fa-minus"></i>
@@ -177,4 +191,4 @@ const Question = ({
   );
 };
 
-export default Question
+export default Question;

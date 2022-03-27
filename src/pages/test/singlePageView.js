@@ -3,10 +3,7 @@ import Choicebox from "../../components/choicebox";
 const SinglePageView = ({ quiz, setQuiz,submitBtn }) => {
   return (
     <div className="flex justify-center">
-      {
-        console.log(quiz)
-      }
-      <div className="w-500">
+      <div className="w-600">
         <div className="shadow-lg p-12 mb-4 border-2">
           <h1 className="text-2xl font-bold py-2">{quiz?.title}</h1>
           <p>Questions : {quiz?.questions?.length}</p>
