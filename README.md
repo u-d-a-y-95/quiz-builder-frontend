@@ -1,5 +1,5 @@
-# Quiz Builder
-Quiz builder is app where you can create quiz and share links to others to test them . 
+# Quiz Maker
+Quiz Maker is app where you can create quiz and share links to others to test them . 
 
 ### Features
 - Create,edit and delete Quiz
