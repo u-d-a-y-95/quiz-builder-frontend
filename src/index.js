@@ -4,16 +4,14 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <DndProvider backend={HTML5Backend}>
+   
         <App />
-      </DndProvider>
+
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")

@@ -1,5 +1,6 @@
 import Option from "./option";
 import ErrorMessage from "../../../components/error";
+import ToolTip from "../../../components/tooltip";
 const Question = ({
   question,
   data,
@@ -145,7 +146,7 @@ const Question = ({
             validatyCheckAndSetData();
           }}
         />
-        <br/>
+        <br />
         <ErrorMessage
           error={data?.error?.status?.questions[questionIndex]?.point}
         />
@@ -156,31 +157,39 @@ const Question = ({
           right: "-55px",
         }}
       >
-        <button
-          className="mt-2"
-          onClick={(e) => {
-            data?.questions?.splice(questionIndex + 1, 0, {
-              order: questionIndex + 1,
-              probType: 1,
-              name: new Date().getTime(),
-              isValid: 0,
-              prob: {
-                text: "",
-                imgUrl: [],
-              },
-              options: [],
-              point: 1,
-              answers: [],
-              predicts: [],
-            });
-            validatyCheckAndSetData();
-          }}
-        >
-          <i className="fa fa-plus"></i>
-        </button>
-        {questionIndex > 0 && (
+        <span className="mt-2">
+        <ToolTip tip="Add new question">
           <button
-            className="mt-2"
+            className="w-full"
+            onClick={(e) => {
+              data?.questions?.splice(questionIndex + 1, 0, {
+                order: questionIndex + 1,
+                probType: 1,
+                name: new Date().getTime(),
+                isValid: 0,
+                prob: {
+                  text: "",
+                  imgUrl: [],
+                },
+                options: [],
+                point: 1,
+                answers: [],
+                predicts: [],
+              });
+              validatyCheckAndSetData();
+            }}
+          >
+            <i className="fa fa-plus"></i>
+          </button>
+        </ToolTip>
+        </span>
+            
+
+        {questionIndex > 0 && (
+          <span className="mt-2">
+          <ToolTip tip="Remove this question">
+          <button
+            className="w-full"
             onClick={(e) => {
               data?.questions?.splice(questionIndex, 1);
               data["isSubmitBtnPressed"] = false;
@@ -189,6 +198,10 @@ const Question = ({
           >
             <i className="fa fa-minus"></i>
           </button>
+          </ToolTip>
+          </span>
+
+
         )}
       </div>
     </>
