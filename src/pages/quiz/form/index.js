@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Droppable } from "react-beautiful-dnd";
 import { Draggable } from "react-beautiful-dnd";
 import { DragDropContext } from "react-beautiful-dnd";
+import TestPage from "../../test";
 
 const QuizForm = () => {
   // "https://cdn.pixabay.com/photo/2021/09/02/16/48/cat-6593947_960_720.jpg"
@@ -201,7 +202,8 @@ const QuizForm = () => {
                 </Droppable>
               </div>
             </div>
-            {/* <Preview data={data} setData={setData} /> */}
+            
+            
             <Modal open={imageModal.isOpen}>
               <div className="bg-white p-8 w-96  rounded">
                 <div className="flex justify-between items-center border-b bg-sky-100 py-2">

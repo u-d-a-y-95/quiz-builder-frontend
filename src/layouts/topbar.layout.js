@@ -1,6 +1,6 @@
 const TopBar = () => {
   return (
-    <div className="h-20 shadow-md border-b-2 border-b-sky-500 flex items-center justify-between">
+    <div className="h-20 min-h-20 shadow-md border-b-2 border-b-sky-500 flex items-center justify-between">
       <div>
         <span className="text-lg font-bold tracking-widest ml-8 text-sky-500">
           Quiz Maker
